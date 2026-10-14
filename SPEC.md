@@ -20,8 +20,8 @@ to its built-in demo. Validate before you ship.
 | `name` | string | yes | Displayed as "Stop N: {name}" |
 | `lat`, `lng` | number | yes | Map marker + GPS "you're here" check (haversine, 30 m radius) |
 | `code` | string | yes | Printed on the physical sign; encoded in the stop QR; manual unlock compares `input.toUpperCase() === code`. Convention: `EDITION-N` (e.g. `LANTERN-1`). |
-| `story` | object keyed by scare level | yes — `story.cozy` required | Narrative shown at the stop. Keys: `cozy`, `spooky`, `afterdark`. A missing level falls back to `cozy`. |
-| `puzzle` | object keyed by scare level | yes — `puzzle.cozy.q` and `puzzle.cozy.a` required | Each variant: `q` (question), `a` (answer), `type` (`"number"` or `"text"`). Answer check is case-insensitive trimmed equality. If no variant exists for the chosen scare level, `fallback` is used. |
+| `story` | object keyed by Dial level | yes — `story.cozy` required | Narrative shown at the stop. Keys: `cozy`, `spooky`, `afterdark`, `overdrive`. A missing level falls back to `cozy`. |
+| `puzzle` | object keyed by Dial level | yes — `puzzle.cozy.q` and `puzzle.cozy.a` required | Each variant: `q` (question), `a` (answer), `type` (`"number"` or `"text"`). Answer check is case-insensitive trimmed equality. If no variant exists for the chosen Dial level, `fallback` is used. |
 | `fallback` | `{q, a}` | yes — both required | Backup puzzle when no variant exists for the scare level. |
 | `hints` | array of strings | yes — exactly 3 | Hint ladder. Convention: hint 3 is the "Ranger assist" (near-answer). |
 
@@ -29,12 +29,17 @@ to its built-in demo. Validate before you ship.
 
 - All `puzzle.cozy.a` answers must be **unique** across the 6 stops (case-insensitive), or the pack is rejected.
 
-## Scare levels (the Dial)
+## Dial levels (4)
 
-`cozy` (default) · `spooky` · `afterdark`. Resolution: `story[scare] || story.cozy`;
-`(puzzle[scare] || puzzle.cozy) || fallback`. Write `cozy` first — it's the only
-required variant. Add `spooky`/`afterdark` variants to taste; anything missing
-degrades gracefully.
+`cozy` (Li'l Z — family) · `spooky` (Classic Z) · `afterdark` (Mad Z) · `overdrive` (Full Madness — office/competitive).
+Resolution: `story[level] || story.cozy`; `(puzzle[level] || puzzle.cozy) || fallback`.
+Write `cozy` first — it's the only required variant. Add `spooky`/`afterdark`/`overdrive`
+variants to taste; anything missing degrades gracefully to `cozy`.
+
+> Player support note: the player UI currently offers the first three Dial
+> positions; `overdrive` variants in a pack are valid and ignored until the
+> player learns the fourth position (a small pending update — the format is
+> already ready for it).
 
 ## Scoring (not in the pack)
 

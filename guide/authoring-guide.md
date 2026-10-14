@@ -9,17 +9,21 @@ the waypoint — never from trivia they can't observe on site.
 Good: "How many wooden swings face the oak?" (countable on site)
 Bad: "In what year was this oak planted?" (trivia, uncheckable, unfun)
 
-## The Dial: three levels, one stop
+## The Dial: four levels, one stop
 
-Write `cozy` first — it's required and it's the default. Then escalate:
+The Dial has four positions — Li'l Z (Cozy), Classic Z (Spooky), Mad Z
+(After Dark), Full Madness (Overdrive). Write `cozy` first — it's required and
+it's the default. Then escalate:
 
 - **Cozy** — all ages. Concrete, countable, kind. ("How many pumpkins are smiling?")
 - **Spooky** — teens+. Riddles, light mischief, atmosphere. ("I have a face but cannot see…")
-- **After Dark** — adults/competitive. Wordplay, ciphers, multi-step. Harder, never meaner.
+- **After Dark** — adults. Wordplay, ciphers, multi-step. Harder, never meaner.
+- **Overdrive** — office/competitive. The toughest puzzles; pair with timed,
+  head-to-head play. (Format-ready now; player UI update pending — see SPEC.md.)
 
 If a level has no variant, the player falls back gracefully — so a Cozy-only
 pack is perfectly valid. Don't pad levels with weak puzzles; two strong levels
-beat three mediocre ones.
+beat four mediocre ones.
 
 ## The hint ladder (exactly 3)
 

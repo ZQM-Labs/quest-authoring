@@ -10,7 +10,7 @@ Exit 0 = valid, exit 1 = invalid (errors printed).
 import json
 import sys
 
-SCARE_LEVELS = ("cozy", "spooky", "afterdark")
+SCARE_LEVELS = ("cozy", "spooky", "afterdark", "overdrive")
 
 
 def err(errors, msg):

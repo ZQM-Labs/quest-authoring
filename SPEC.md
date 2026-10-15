@@ -18,7 +18,8 @@ to its built-in demo. Validate before you ship.
 |---|---|---|---|
 | `id` | number | yes | 1-based stop number; also the QR `?stop=N` deep-link target. Must match the stop's `order` in the kit config. |
 | `name` | string | yes | Displayed as "Stop N: {name}" |
-| `lat`, `lng` | number | yes | Map marker + GPS "you're here" check (haversine, 30 m radius) |
+| `lat`, `lng` | number | yes | Map marker + GPS "you're here" check (haversine) |
+| `radius` | number | no | GPS check radius in meters (default 30). Larger for open areas, smaller for precise locations. |
 | `code` | string | yes | Printed on the physical sign; encoded in the stop QR; manual unlock compares `input.toUpperCase() === code`. Convention: `EDITION-N` (e.g. `LANTERN-1`). |
 | `story` | object keyed by Dial level | yes — `story.cozy` required | Narrative shown at the stop. Keys: `cozy`, `spooky`, `afterdark`, `overdrive`. A missing level falls back to `cozy`. |
 | `puzzle` | object keyed by Dial level | yes — `puzzle.cozy.q` and `puzzle.cozy.a` required | Each variant: `q` (question), `a` (answer), `type` (`"number"` or `"text"`). Answer check is case-insensitive trimmed equality. If no variant exists for the chosen Dial level, `fallback` is used. |

@@ -27,6 +27,59 @@ def _blank(v):
     return v is None or str(v).strip() == ""
 
 
+def _haversine_m(lat1, lng1, lat2, lng2):
+    """Great-circle distance in meters."""
+    import math
+    R = 6371000
+    t = math.radians
+    h = math.sin(t(lat2 - lat1) / 2) ** 2 + math.cos(t(lat1)) * math.cos(t(lat2)) * math.sin(t(lng2 - lng1) / 2) ** 2
+    return 2 * R * math.asin(math.sqrt(h))
+
+
+def _spatial_warnings(stops):
+    """Advisory geospatial checks: stop spacing and route length.
+
+    These are warnings, not errors — a tight indoor venue or a long trail
+    may be intentional. But GPS can't reliably distinguish stops <20m
+    apart, and >1km between stops is a long walk for families.
+    """
+    warnings = []
+    coords = []
+    for s in stops:
+        lat, lng = s.get("lat"), s.get("lng")
+        if isinstance(lat, (int, float)) and isinstance(lng, (int, float)) \
+                and not isinstance(lat, bool) and not isinstance(lng, bool):
+            coords.append((s.get("id", "?"), float(lat), float(lng)))
+    if len(coords) < 2:
+        return warnings
+    # Too close: check ALL pairs (GPS can't distinguish any two stops <20m apart)
+    for i in range(len(coords)):
+        for j in range(i + 1, len(coords)):
+            idi, lati, lngi = coords[i]
+            idj, latj, lngj = coords[j]
+            d = _haversine_m(lati, lngi, latj, lngj)
+            if d < 20:
+                warnings.append(
+                    f"spatial: stops {idi} and {idj} are only {d:.0f}m apart — "
+                    f"GPS (±10-15m) may not distinguish them; use distinct sign codes")
+    # Too far: check CONSECUTIVE stops only (the walking route)
+    for i in range(len(coords) - 1):
+        idi, lati, lngi = coords[i]
+        idj, latj, lngj = coords[i + 1]
+        d = _haversine_m(lati, lngi, latj, lngj)
+        if d > 1000:
+            warnings.append(
+                f"spatial: stops {idi} → {idj} are {d/1000:.1f}km apart — "
+                f"long walk, consider transport or a tighter cluster")
+    # Total route length (in stop order)
+    total = sum(_haversine_m(coords[i][1], coords[i][2], coords[i+1][1], coords[i+1][2])
+                for i in range(len(coords) - 1))
+    if total > 3000:
+        warnings.append(
+            f"spatial: total route is {total/1000:.1f}km — verify it's walkable for your audience")
+    return warnings
+
+
 def validate(pack):
     errors = []
     if not isinstance(pack, dict):
@@ -87,6 +140,8 @@ def validate(pack):
         err(errors, f"cross-stop: puzzle.cozy.a answers must be unique (got {answers})")
     if len(set(ids)) != len(ids):
         err(errors, f"cross-stop: stop ids must be unique (got {ids})")
+    for w in _spatial_warnings(stops):
+        errors.append("WARNING: " + w)
     return errors
 
 

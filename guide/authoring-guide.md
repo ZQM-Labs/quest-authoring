@@ -16,7 +16,8 @@ The Dial has four positions — Li'l Z (Cozy), Classic Z (Spooky), Mad Z
 it's the default. Then escalate:
 
 - **Cozy** — all ages. Concrete, countable, kind. ("How many pumpkins are smiling?")
-- **Spooky** — teens+. Riddles, light mischief, atmosphere. ("I have a face but cannot see…")
+- **Spooky** — teens+. Riddles, light mischief, atmosphere.
+  ("I have a face but cannot see…")
 - **After Dark** — adults. Wordplay, ciphers, multi-step. Harder, never meaner.
 - **Overdrive** — office/competitive. The toughest puzzles; pair with timed,
   head-to-head play. (Format-ready now; player UI update pending — see SPEC.md.)

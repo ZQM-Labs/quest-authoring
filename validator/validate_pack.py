@@ -13,6 +13,7 @@ Usage: python3 validate_pack.py <pack.json>
 Exit 0 = valid, exit 1 = invalid (errors printed).
 """
 import json
+import math
 import sys
 
 SCARE_LEVELS = ("cozy", "spooky", "afterdark", "overdrive")
@@ -49,7 +50,7 @@ def _spatial_warnings(stops):
         lat, lng = s.get("lat"), s.get("lng")
         if (isinstance(lat, (int, float)) and isinstance(lng, (int, float))
                 and not isinstance(lat, bool) and not isinstance(lng, bool)
-                and __import__("math").isfinite(lat) and __import__("math").isfinite(lng)
+                and math.isfinite(lat) and math.isfinite(lng)
                 and -90 <= lat <= 90 and -180 <= lng <= 180):
             coords.append((s.get("id", "?"), float(lat), float(lng)))
     if len(coords) < 2:

@@ -30,7 +30,6 @@ def _blank(v):
 
 def _haversine_m(lat1, lng1, lat2, lng2):
     """Great-circle distance in meters."""
-    import math
     R = 6371000
     t = math.radians
     h = math.sin(t(lat2 - lat1) / 2) ** 2 + math.cos(t(lat1)) * math.cos(t(lat2)) * math.sin(t(lng2 - lng1) / 2) ** 2
@@ -47,6 +46,8 @@ def _spatial_warnings(stops):
     warnings = []
     coords = []
     for s in stops:
+        if not isinstance(s, dict):
+            continue
         lat, lng = s.get("lat"), s.get("lng")
         if (isinstance(lat, (int, float)) and isinstance(lng, (int, float))
                 and not isinstance(lat, bool) and not isinstance(lng, bool)
@@ -106,10 +107,10 @@ def validate(pack):
         else:
             ids.append(sid)
         for f in ("name", "code"):
-            if _blank(s.get(f)):
+            value = s.get(f)
+            if not isinstance(value, str) or not value.strip():
                 err(errors, f"{tag}: '{f}' must be a non-empty string")
         lat, lng = s.get("lat"), s.get("lng")
-        import math
         for field, value in (("lat", lat), ("lng", lng)):
             if isinstance(value, bool) or not isinstance(value, (int, float)):
                 err(errors, f"{tag}: '{field}' must be numeric")
@@ -144,7 +145,7 @@ def validate(pack):
         if not isinstance(fb, dict) or _blank(fb.get("q")) or _blank(fb.get("a")):
             err(errors, f"{tag}: 'fallback.q' and 'fallback.a' are required")
         hints = s.get("hints")
-        if not isinstance(hints, list) or len(hints) != 3:
+        if not isinstance(hints, list) or len(hints) != 3 or any(not isinstance(h, str) for h in hints):
             err(errors, f"{tag}: 'hints' must be an array of exactly 3 strings")
 
     if len(set(answers)) != len(answers):

@@ -105,10 +105,18 @@ def validate(pack):
         for f in ("name", "code"):
             if _blank(s.get(f)):
                 err(errors, f"{tag}: '{f}' must be a non-empty string")
-        for f in ("lat", "lng"):
-            v = s.get(f)
-            if isinstance(v, bool) or not isinstance(v, (int, float)):
-                err(errors, f"{tag}: '{f}' must be numeric")
+        lat, lng = s.get("lat"), s.get("lng")
+        import math
+        for field, value in (("lat", lat), ("lng", lng)):
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                err(errors, f"{tag}: '{field}' must be numeric")
+            elif not math.isfinite(value):
+                err(errors, f"{tag}: '{field}' must be finite")
+        if (isinstance(lat, (int, float)) and not isinstance(lat, bool) and
+                isinstance(lng, (int, float)) and not isinstance(lng, bool) and
+                math.isfinite(lat) and math.isfinite(lng)):
+            if not -90 <= lat <= 90 or not -180 <= lng <= 180:
+                err(errors, f"{tag}: lat/lng out of geographic bounds")
         story = s.get("story")
         if not isinstance(story, dict) or "cozy" not in story:
             err(errors, f"{tag}: 'story.cozy' is required")
@@ -140,8 +148,6 @@ def validate(pack):
         err(errors, f"cross-stop: puzzle.cozy.a answers must be unique (got {answers})")
     if len(set(ids)) != len(ids):
         err(errors, f"cross-stop: stop ids must be unique (got {ids})")
-    for w in _spatial_warnings(stops):
-        errors.append("WARNING: " + w)
     return errors
 
 
@@ -159,6 +165,9 @@ def main():
         print(f"invalid JSON in {sys.argv[1]}: {e}", file=sys.stderr)
         return 2
     errors = validate(pack)
+    warnings = _spatial_warnings(pack.get("stops", [])) if isinstance(pack, dict) and isinstance(pack.get("stops"), list) else []
+    for warning in warnings:
+        print(f"WARNING: {warning}")
     if errors:
         print(f"INVALID: {len(errors)} error(s)")
         for e in errors:

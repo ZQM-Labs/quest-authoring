@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD033 MD012 -->
+
 # Quest Authoring — ZQM Labs
 
 <!-- ZQM-START -->
@@ -18,16 +20,19 @@ The quest-pack format: spec, validator, and authoring guide for building new
 | Path | What it is |
 |---|---|
 | [`SPEC.md`](SPEC.md) | The quest-pack JSON format, field by field, including every validation rule the player enforces. |
-| [`guide/authoring-guide.md`](guide/authoring-guide.md) | How to write good stops: puzzles, hint ladders, and the three Dial levels. |
+| [`guide/authoring-guide.md`](guide/authoring-guide.md) | How to write good stops: puzzles, hint ladders, and all four Dial levels. |
 | [`validator/validate_pack.py`](validator/validate_pack.py) | The validator. Run it on your pack before you ship it — the player rejects invalid packs wholesale. |
 
 ## Workflow
 
 1. Draft your 6 stops (see the authoring guide).
 2. Write the pack JSON (see the spec).
-3. `python3 validator/validate_pack.py my-pack.json` — fix everything it flags.
-4. Playtest it on foot (see [ZQM-Labs/playtests](https://github.com/ZQM-Labs/playtests)).
-5. Publish via [ZQM-Labs/quest-packs](https://github.com/ZQM-Labs/quest-packs).
+3. `python3 validator/validate_pack.py my-pack.json` — fix everything it
+   flags.
+4. Playtest it on foot (see
+   [ZQM-Labs/playtests](https://github.com/ZQM-Labs/playtests)).
+5. Publish via
+   [ZQM-Labs/quest-packs](https://github.com/ZQM-Labs/quest-packs).
 
 ## More from ZQM Labs
 

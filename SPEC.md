@@ -39,10 +39,9 @@ Resolution: `story[level] || story.cozy`; `(puzzle[level] || puzzle.cozy) || fal
 Write `cozy` first — it's the only required variant. Add `spooky`/`afterdark`/`overdrive`
 variants to taste; anything missing degrades gracefully to `cozy`.
 
-> Player support note: the player UI currently offers the first three Dial
-> positions; `overdrive` variants in a pack are valid and ignored until the
-> player learns the fourth position (a small pending update — the format is
-> already ready for it).
+> Player support note: the player UI offers all four Dial positions. Missing
+> variants fall back to `cozy`; the authoring format does not require every
+> variant to be present.
 
 ## Scoring (not in the pack)
 

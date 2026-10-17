@@ -77,3 +77,8 @@ Finished packs for the catalog:
   <a href="https://github.com/ZQM-Computing">ZQM Computing</a>
 </p>
 <!-- ZQM-FOOTER-END -->
+
+
+## Release-status boundary
+
+Validation proves only the rules exercised by the validator and player version tested. It does not prove that an edition is publicly available, checkout works, a venue is approved, or an event is safe and accessible. For Wisp's Lost Lanterns or any future edition, attach the exact pack/version and validator output to a dated release record, then link the matching player test and field-playtest evidence. Checkout/payment/fulfillment must be verified separately. If those records are absent, document the release or field status as **unknown** rather than deriving it from a passing validator.

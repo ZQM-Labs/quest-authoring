@@ -23,6 +23,21 @@ The quest-pack format: spec, validator, and authoring guide for building new
 | [`guide/authoring-guide.md`](guide/authoring-guide.md) | How to write good stops: puzzles, hint ladders, and all four Dial levels. |
 | [`validator/validate_pack.py`](validator/validate_pack.py) | The validator. Run it on your pack before you ship it — the player rejects invalid packs wholesale. |
 
+## Compatibility and release contract
+
+The specification, Python validator, and player parser are separate enforcement points. A pack is not release-ready just because one of them accepts it.
+
+For each release candidate:
+
+1. Run the validator against the exact JSON artifact that will ship.
+2. Load that same artifact in the target player version; record both commit/version identifiers.
+3. Include negative fixtures for malformed JSON, missing required fields, invalid field types, unsupported values, and unexpected structures.
+4. Confirm that validation failures are actionable and do not crash the player.
+5. Playtest the pack on the intended route, including QR/manual entry, GPS failure, hint progression, offline resume, and observation-answer fallback.
+6. Record any intentional differences between authoring validation and runtime validation as explicit compatibility notes.
+
+The player currently enforces its own `validatePack` rules. Keep the [player repository](https://github.com/ZQM-Labs/lantern-player) and [playtest protocol](https://github.com/ZQM-Labs/playtests) in the release review; this repository's validator is not a substitute for runtime testing.
+
 ## Workflow
 
 1. Draft your 6 stops (see the authoring guide).

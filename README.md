@@ -22,6 +22,14 @@ The quest-pack format: spec, validator, generator, and authoring guide for build
 | [`validator/validate_pack.py`](validator/validate_pack.py) | The validator. Run it on your pack before you ship it — the player rejects invalid packs wholesale. |
 | [`validator/gen_quest_pack.py`](validator/gen_quest_pack.py) | The generator. Feed it a YAML config, get a playable quest pack HTML + manifest. |
 
+## Installation
+
+```bash
+pip install -e .
+```
+
+Requires Python 3.11+.
+
 ## Quick Start
 
 ```bash
@@ -46,3 +54,7 @@ For each release candidate:
 6. Record any intentional differences between authoring validation and runtime validation as explicit compatibility notes.
 
 The player currently enforces its own `validatePack` rules. Keep the [player repository](https://github.com/ZQM-Labs/lantern-player) and [playtest protocol](https://github.com/ZQM-Labs/playtests) in the release review; this repository's validator is not a substitute for runtime testing.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

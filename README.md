@@ -10,9 +10,7 @@
 </p>
 <!-- ZQM-END -->
 
-
-
-The quest-pack format: spec, validator, and authoring guide for building new
+The quest-pack format: spec, validator, generator, and authoring guide for building new
 **ZQM Labs — Z's Quests & Mischief** location-game editions.
 
 ## Contents
@@ -22,6 +20,17 @@ The quest-pack format: spec, validator, and authoring guide for building new
 | [`SPEC.md`](SPEC.md) | The quest-pack JSON format, field by field, including every validation rule the player enforces. |
 | [`guide/authoring-guide.md`](guide/authoring-guide.md) | How to write good stops: puzzles, hint ladders, and all four Dial levels. |
 | [`validator/validate_pack.py`](validator/validate_pack.py) | The validator. Run it on your pack before you ship it — the player rejects invalid packs wholesale. |
+| [`validator/gen_quest_pack.py`](validator/gen_quest_pack.py) | The generator. Feed it a YAML config, get a playable quest pack HTML + manifest. |
+
+## Quick Start
+
+```bash
+# Generate a quest pack from YAML
+python validator/gen_quest_pack.py my-quest.yaml
+
+# Validate the output
+python validator/validate_pack.py dist/my-quest-slug/manifest.json
+```
 
 ## Compatibility and release contract
 
@@ -37,48 +46,3 @@ For each release candidate:
 6. Record any intentional differences between authoring validation and runtime validation as explicit compatibility notes.
 
 The player currently enforces its own `validatePack` rules. Keep the [player repository](https://github.com/ZQM-Labs/lantern-player) and [playtest protocol](https://github.com/ZQM-Labs/playtests) in the release review; this repository's validator is not a substitute for runtime testing.
-
-## Workflow
-
-1. Draft your 6 stops (see the authoring guide).
-2. Write the pack JSON (see the spec).
-3. `python3 validator/validate_pack.py my-pack.json` — fix everything it
-   flags.
-4. Playtest it on foot (see
-   [ZQM-Labs/playtests](https://github.com/ZQM-Labs/playtests)).
-5. Publish via
-   [ZQM-Labs/quest-packs](https://github.com/ZQM-Labs/quest-packs).
-
-## More from ZQM Labs
-
-- [quest-packs][qp] — edition catalog + free sample quest
-- [organizer-toolkit][otk] — setup checklists, print specs, FAQ
-- [playtests][pt] — playtest protocol and results
-- [zqmlabs-site][site] — the public website
-
-[qp]: https://github.com/ZQM-Labs/quest-packs
-[otk]: https://github.com/ZQM-Labs/organizer-toolkit
-[pt]: https://github.com/ZQM-Labs/playtests
-[site]: https://github.com/ZQM-Labs/zqmlabs-site
-
-Finished packs for the catalog:
-<zqmcomputing@gmail.com> · <https://zqmlabs.com>
-
-*Play more. Plan less.*
-
-
-<!-- ZQM-FOOTER-START -->
----
-
-<p align="center">
-  <em>Play more. Plan less.</em><br>
-  <a href="https://zqmlabs.com">zqmlabs.com</a> •
-  <a href="https://github.com/ZQM-Labs">ZQM Labs</a> •
-  <a href="https://github.com/ZQM-Computing">ZQM Computing</a>
-</p>
-<!-- ZQM-FOOTER-END -->
-
-
-## Release-status boundary
-
-Validation proves only the rules exercised by the validator and player version tested. It does not prove that an edition is publicly available, checkout works, a venue is approved, or an event is safe and accessible. For Wisp's Lost Lanterns or any future edition, attach the exact pack/version and validator output to a dated release record, then link the matching player test and field-playtest evidence. Checkout/payment/fulfillment must be verified separately. If those records are absent, document the release or field status as **unknown** rather than deriving it from a passing validator.

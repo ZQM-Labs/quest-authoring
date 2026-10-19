@@ -1,0 +1,41 @@
+name: Tests
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+permissions:
+  contents: read
+jobs:
+  python-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          pip install pytest
+          if [ -f "requirements.txt" ]; then pip install -r requirements.txt; fi
+      - run: |
+          if [ -f "pytest.ini" ] || [ -f "pyproject.toml" ]; then
+            python -m pytest
+          elif [ -d "tests" ] && [ -n "$(find tests/ -name 'test_*.py' -o -name '*_test.py' 2>/dev/null)" ]; then
+            python -m pytest tests/
+          else
+            echo "No Python test suite found"
+          fi
+  js-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: if [ -f "package.json" ]; then npm ci; fi
+      - run: |
+          if [ -f "package.json" ]; then
+            npm test
+          else
+            echo "No JS test suite found"
+          fi

@@ -24,7 +24,7 @@ to its built-in demo. Validate before you ship.
 | `story` | object | yes — `cozy` required | Narrative; missing → `cozy`. |
 | `puzzle` | object | yes — `cozy.q`+`a` | `q`, `a`, `type`; else `fallback`. |
 | `fallback` | `{q, a}` | yes — both required | Backup for missing levels. |
-| `hints` | string[3] | yes — exactly 3 | Hint 3 is the "Ranger assist". |
+| `hints` | string[3] or per-level object | yes — exactly 3 per level | Either a flat array of 3 (used at every level) or `{cozy, spooky, afterdark, overdrive}` with exactly 3 each. Hint 3 is the "Ranger assist". |
 
 ## Cross-stop rules
 

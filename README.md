@@ -15,6 +15,14 @@
 The quest-pack format: spec, validator, generator, and authoring guide for building new
 **ZQM Labs — Z's Quests & Mischief** location-game editions.
 
+## Repository role and status
+
+**Status:** Active, public. Format authority for ZQM Labs quest packs.
+
+**What this repository is:** The quest-pack JSON specification (`SPEC.md`), the authoring guide, and the Python tooling — `validator/validate_pack.py` and `validator/gen_quest_pack.py` — for building new location-game editions.
+
+**What it contributes:** Every pack in quest-packs, and every community-submitted pack, is written against this spec and checked with this validator; quest-packs' own documentation points authors here for the generator. The player's runtime `validatePack` rules are a separate enforcement point (see the compatibility contract below), so this repo defines the format but does not by itself prove a pack will run.
+
 ## Contents
 
 | Path | What it is |
@@ -62,7 +70,7 @@ For each release candidate:
 5. Playtest the pack on the intended route, including QR/manual entry, GPS failure, hint progression, offline resume, and observation-answer fallback.
 6. Record any intentional differences between authoring validation and runtime validation as explicit compatibility notes.
 
-The player currently enforces its own `validatePack` rules. Keep the [player repository](https://github.com/ZQM-Labs/lantern-player) and [playtest protocol](https://github.com/ZQM-Labs/playtests) in the release review; this repository's validator is not a substitute for runtime testing.
+The player currently enforces its own `validatePack` rules. Keep the [player repository](https://github.com/ZQM-Labs/quest-player) and [playtest protocol](https://github.com/ZQM-Labs/playtests) in the release review; this repository's validator is not a substitute for runtime testing.
 
 ## License
 

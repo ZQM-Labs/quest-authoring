@@ -42,6 +42,13 @@ python validator/gen_quest_pack.py my-quest.yaml
 python validator/validate_pack.py dist/my-quest-slug/manifest.json
 ```
 
+## Usage
+
+Write your quest pack as JSON following the spec in this repo, then run
+it through the validator before publishing — a pack that validates will
+load in the player. The [Quick Start](#quick-start) walks through a
+minimal pack end to end.
+
 ## Compatibility and release contract
 
 The specification, Python validator, and player parser are separate enforcement points. A pack is not release-ready just because one of them accepts it.

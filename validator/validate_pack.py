@@ -130,9 +130,9 @@ def validate(pack):
             err(errors, f"{tag}: 'puzzle.cozy.q' and 'puzzle.cozy.a' are required")
         else:
             a = cozy["a"]
-            if str(a) != str(a).strip():
-                err(errors, f"{tag}: 'puzzle.cozy.a' has leading/trailing whitespace "
-                            f"(the player's answer check would never match it)")
+            # Parity with the player: its answer check normalizes BOTH sides
+            # (lowercase, strip all non-alphanumerics), so surrounding
+            # whitespace in an answer is harmless and must not error here.
             answers.append(str(a).strip().lower())
             if cozy.get("type") not in (None, "number", "text"):
                 err(errors, f"{tag}: puzzle type must be 'number' or 'text'")

@@ -58,3 +58,14 @@ The player currently enforces its own `validatePack` rules. Keep the [player rep
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## Validation
+
+This repository uses GitHub Actions for continuous integration. See [CI workflow](.github/workflows/ci.yml) for details.
+
+To validate locally:
+
+```bash
+# Run documentation checks
+python scripts/check_docs.py
+```

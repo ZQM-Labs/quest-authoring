@@ -32,14 +32,6 @@ The quest-pack format: spec, validator, generator, and authoring guide for build
 | [`validator/validate_pack.py`](validator/validate_pack.py) | The validator. Run it on your pack before you ship it — the player rejects invalid packs wholesale. |
 | [`validator/gen_quest_pack.py`](validator/gen_quest_pack.py) | The generator. Feed it a YAML config, get a playable quest pack HTML + manifest. |
 
-## Installation
-
-```bash
-pip install -e .
-```
-
-Requires Python 3.11+.
-
 ## Quick Start
 
 ```bash

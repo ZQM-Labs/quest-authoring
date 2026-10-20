@@ -130,9 +130,9 @@ def validate(pack):
             err(errors, f"{tag}: 'puzzle.cozy.q' and 'puzzle.cozy.a' are required")
         else:
             a = cozy["a"]
-            if str(a) != str(a).strip():
-                err(errors, f"{tag}: 'puzzle.cozy.a' has leading/trailing whitespace "
-                            f"(the player's answer check would never match it)")
+            # Parity with the player: its answer check normalizes BOTH sides
+            # (lowercase, strip all non-alphanumerics), so surrounding
+            # whitespace in an answer is harmless and must not error here.
             answers.append(str(a).strip().lower())
             if cozy.get("type") not in (None, "number", "text"):
                 err(errors, f"{tag}: puzzle type must be 'number' or 'text'")
@@ -145,8 +145,17 @@ def validate(pack):
         if not isinstance(fb, dict) or _blank(fb.get("q")) or _blank(fb.get("a")):
             err(errors, f"{tag}: 'fallback.q' and 'fallback.a' are required")
         hints = s.get("hints")
-        if not isinstance(hints, list) or len(hints) != 3 or any(not isinstance(h, str) for h in hints):
-            err(errors, f"{tag}: 'hints' must be an array of exactly 3 strings")
+        if isinstance(hints, list):
+            if len(hints) != 3 or any(not isinstance(h, str) or not h.strip() for h in hints):
+                err(errors, f"{tag}: 'hints' must be an array of exactly 3 non-empty strings")
+        elif isinstance(hints, dict):
+            for level in SCARE_LEVELS:
+                lh = hints.get(level)
+                if (not isinstance(lh, list) or len(lh) != 3
+                        or any(not isinstance(h, str) or not h.strip() for h in lh)):
+                    err(errors, f"{tag}: 'hints.{level}' must be an array of exactly 3 non-empty strings")
+        else:
+            err(errors, f"{tag}: 'hints' must be an array of exactly 3 strings or a per-level object")
 
     if len(set(answers)) != len(answers):
         err(errors, f"cross-stop: puzzle.cozy.a answers must be unique (got {answers})")

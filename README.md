@@ -78,3 +78,7 @@ To validate locally:
 # Run documentation checks
 python scripts/check_docs.py
 ```
+
+---
+
+*Games, gear & a little mischief. Play more. Plan less.*

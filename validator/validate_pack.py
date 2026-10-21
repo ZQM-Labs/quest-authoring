@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate a ZQM Labs quest pack against SPEC.md.
 
-Mirrors the player's validatePack() (ZQM-Computing/zqm-labs, lantern-player/app.js):
+Mirrors the player's validatePack() (ZQM-Labs/quest-player, app.js):
 a pack that fails here will be rejected wholesale by the player, which falls
 back to its built-in demo.
 
@@ -26,6 +26,22 @@ def err(errors, msg):
 def _blank(v):
     """Player-falsy: None, missing, empty, or whitespace-only."""
     return v is None or str(v).strip() == ""
+
+
+def _puzzle_ok(variant):
+    """Player validatePack semantics for one puzzle variant: a dict whose
+    `q` is a non-empty string and whose `a` is a non-empty string or a
+    finite number. The player reads q/a as properties, so a non-dict
+    variant (string, list, number) can never satisfy it."""
+    if not isinstance(variant, dict):
+        return False
+    q = variant.get("q")
+    if not isinstance(q, str) or not q.strip():
+        return False
+    a = variant.get("a")
+    if isinstance(a, str):
+        return bool(a.strip())
+    return isinstance(a, (int, float)) and not isinstance(a, bool) and math.isfinite(a)
 
 
 def _haversine_m(lat1, lng1, lat2, lng2):
@@ -122,11 +138,11 @@ def validate(pack):
             if not -90 <= lat <= 90 or not -180 <= lng <= 180:
                 err(errors, f"{tag}: lat/lng out of geographic bounds")
         story = s.get("story")
-        if not isinstance(story, dict) or "cozy" not in story:
+        if not isinstance(story, dict) or not isinstance(story.get("cozy"), str) or not story["cozy"].strip():
             err(errors, f"{tag}: 'story.cozy' is required")
         puzzle = s.get("puzzle")
         cozy = puzzle.get("cozy") if isinstance(puzzle, dict) else None
-        if not isinstance(cozy, dict) or _blank(cozy.get("q")) or _blank(cozy.get("a")):
+        if not _puzzle_ok(cozy):
             err(errors, f"{tag}: 'puzzle.cozy.q' and 'puzzle.cozy.a' are required")
         else:
             a = cozy["a"]
@@ -136,11 +152,20 @@ def validate(pack):
             answers.append(str(a).strip().lower())
             if cozy.get("type") not in (None, "number", "text"):
                 err(errors, f"{tag}: puzzle type must be 'number' or 'text'")
-        for level in SCARE_LEVELS:
-            for section in ("story", "puzzle"):
-                variant = (s.get(section) or {}).get(level)
-                if variant is not None and not isinstance(variant, (str, dict)):
-                    err(errors, f"{tag}: {section}.{level} has wrong type")
+        # Present non-cozy tiers must be well-formed (player parity): a
+        # missing tier falls back to cozy at runtime, but a tier that IS
+        # present is used as-is, so an empty story variant or a puzzle
+        # variant without a usable question/answer would break the hunt.
+        # A JSON null variant counts as absent, exactly as in the player.
+        for level in SCARE_LEVELS[1:]:
+            if isinstance(story, dict):
+                variant = story.get(level)
+                if variant is not None and (not isinstance(variant, str) or not variant.strip()):
+                    err(errors, f"{tag}: 'story.{level}' is present but must be a non-empty string")
+            if isinstance(puzzle, dict):
+                variant = puzzle.get(level)
+                if variant is not None and not _puzzle_ok(variant):
+                    err(errors, f"{tag}: 'puzzle.{level}' is present but needs a non-empty question and answer")
         fb = s.get("fallback")
         if not isinstance(fb, dict) or _blank(fb.get("q")) or _blank(fb.get("a")):
             err(errors, f"{tag}: 'fallback.q' and 'fallback.a' are required")

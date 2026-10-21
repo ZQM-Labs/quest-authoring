@@ -32,6 +32,15 @@ The quest-pack format: spec, validator, generator, and authoring guide for build
 | [`validator/validate_pack.py`](validator/validate_pack.py) | The validator. Run it on your pack before you ship it — the player rejects invalid packs wholesale. |
 | [`validator/gen_quest_pack.py`](validator/gen_quest_pack.py) | The generator. Feed it a YAML config, get a playable quest pack HTML + manifest. |
 
+## Installation
+
+Clone the repo and work from its root. The generator and validator are Python 3 scripts using only the standard library — no extra dependencies to install:
+
+```bash
+git clone https://github.com/ZQM-Labs/quest-authoring.git
+cd quest-authoring
+```
+
 ## Quick Start
 
 ```bash

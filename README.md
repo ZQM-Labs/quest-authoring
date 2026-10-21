@@ -30,16 +30,17 @@ The quest-pack format: spec, validator, generator, and authoring guide for build
 | [`SPEC.md`](SPEC.md) | The quest-pack JSON format, field by field, including every validation rule the player enforces. |
 | [`guide/authoring-guide.md`](guide/authoring-guide.md) | How to write good stops: puzzles, hint ladders, and all four Dial levels. |
 | [`validator/validate_pack.py`](validator/validate_pack.py) | The validator. Run it on your pack before you ship it — the player rejects invalid packs wholesale. |
-| [`validator/gen_quest_pack.py`](validator/gen_quest_pack.py) | The generator. Feed it a YAML config, get a playable quest pack HTML + manifest. |
+| [`validator/gen_quest_pack.py`](validator/gen_quest_pack.py) | The generator. Feed it a YAML config, get a printable HTML preview + a summary manifest. The manifest is **not** a SPEC pack — its `stops` is a count, not the stop array — so it is not loadable by the player and will not pass the validator. Playable packs are authored as JSON per `SPEC.md`. |
 
 ## Quick Start
 
 ```bash
-# Generate a quest pack from YAML
+# Generate a printable preview from YAML (not a playable pack — see the
+# generator note in Contents above)
 python validator/gen_quest_pack.py my-quest.yaml
 
-# Validate the output
-python validator/validate_pack.py dist/my-quest-slug/manifest.json
+# Validate a SPEC pack JSON before publishing
+python validator/validate_pack.py path/to/pack.json
 ```
 
 ## Usage

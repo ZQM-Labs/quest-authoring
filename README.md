@@ -12,8 +12,7 @@
 <!-- markdownlint-enable MD033 -->
 <!-- ZQM-END -->
 
-The quest-pack format: spec, validator, generator, and authoring guide for building new
-**ZQM Labs — Z's Quests & Mischief** location-game editions.
+The **ZQM Labs quest-pack specification and authoring tools** define how to build content for location-based scavenger-hunt games. This repository contains the pack schema, authoring guide, Python validator, and pack generator used to prepare edition files. It is the format authority for content tooling; a pack passing the Python validator still needs compatibility checks against the player runtime and playtesting before release.
 
 ## Repository role and status
 

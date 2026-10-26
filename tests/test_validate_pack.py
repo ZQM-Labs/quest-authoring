@@ -135,6 +135,29 @@ class ParityTests(unittest.TestCase):
         pack["stops"][1]["puzzle"]["cozy"]["a"] = pack["stops"][0]["puzzle"]["cozy"]["a"]
         self.assertTrue(any("must be unique" in e for e in validate(pack)))
 
+    def test_answers_equivalent_after_player_normalization_are_duplicates(self):
+        cases = [
+            ("Old oak", "the old oak"),
+            ("lanterns", "lantern"),
+            ("red-blue", "red blue"),
+            ("4,015", "4015"),
+        ]
+        for first, second in cases:
+            with self.subTest(first=first, second=second):
+                pack = sample_pack()
+                pack["stops"][0]["puzzle"]["cozy"]["a"] = first
+                pack["stops"][1]["puzzle"]["cozy"]["a"] = second
+                self.assertTrue(
+                    any("must be unique" in e for e in validate(pack)),
+                    f"{first!r} and {second!r} should collide under player normalization",
+                )
+
+    def test_answers_not_equivalent_after_player_normalization_remain_valid(self):
+        pack = sample_pack()
+        pack["stops"][0]["puzzle"]["cozy"]["a"] = "old oak"
+        pack["stops"][1]["puzzle"]["cozy"]["a"] = "old elm"
+        self.assertFalse(any("must be unique" in e for e in validate(pack)))
+
     def test_real_sample_pack_fixture_validates(self):
         # Vendored verbatim from ZQM-Labs/quest-packs
         # sample-quest/wisp-sample.json (the official free sample: story

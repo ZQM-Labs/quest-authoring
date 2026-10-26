@@ -26,7 +26,7 @@ The **ZQM Labs quest-pack specification and authoring tools** define how to buil
 
 | Path | What it is |
 |---|---|
-| [`SPEC.md`](SPEC.md) | The quest-pack JSON format, field by field, including every validation rule the player enforces. |
+| [`SPEC.md`](SPEC.md) | The quest-pack JSON format, documented fields, and authoring constraints. Runtime enforcement must also be checked against the target player version. |
 | [`guide/authoring-guide.md`](guide/authoring-guide.md) | How to write good stops: puzzles, hint ladders, and all four Dial levels. |
 | [`validator/validate_pack.py`](validator/validate_pack.py) | The validator. Run it on your pack before you ship it — the player rejects invalid packs wholesale. |
 | [`validator/gen_quest_pack.py`](validator/gen_quest_pack.py) | The generator. Feed it a YAML config, get a printable HTML preview + a summary manifest. The manifest is **not** a SPEC pack — its `stops` is a count, not the stop array — so it is not loadable by the player and will not pass the validator. Playable packs are authored as JSON per `SPEC.md`. |
@@ -53,10 +53,7 @@ python validator/validate_pack.py path/to/pack.json
 
 ## Usage
 
-Write your quest pack as JSON following the spec in this repo, then run
-it through the validator before publishing — a pack that validates will
-load in the player. The [Quick Start](#quick-start) walks through a
-minimal pack end to end.
+Write your quest pack as JSON following [the spec](SPEC.md), then run the validator before publishing. **A successful Python validation means the pack passes the authoring validator; it does not guarantee that every player version accepts or correctly runs it.** Confirm compatibility by loading the exact JSON artifact in the target player build and completing the release checks below. The [Quick Start](#quick-start) shows the two local commands.
 
 ## Compatibility and release contract
 

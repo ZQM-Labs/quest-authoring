@@ -14,6 +14,7 @@ Exit 0 = valid, exit 1 = invalid (errors printed).
 """
 import json
 import math
+import re
 import sys
 
 SCARE_LEVELS = ("cozy", "spooky", "afterdark", "overdrive")
@@ -26,6 +27,23 @@ def err(errors, msg):
 def _blank(v):
     """Player-falsy: None, missing, empty, or whitespace-only."""
     return v is None or str(v).strip() == ""
+
+
+def _normalize_answer(value):
+    """Mirror quest-player normalizeAnswer() for cross-stop uniqueness.
+
+    Punctuation and spacing are ignored, one leading article is ignored when
+    the answer has multiple tokens, and a final plural 's' is ignored under
+    the same conditions as the browser runtime.
+    """
+    tokens = [token for token in re.split(r"[^a-z0-9]+", str(value).lower()) if token]
+    if len(tokens) > 1 and tokens[0] in {"a", "an", "the", "mr", "mrs", "ms", "dr"}:
+        tokens.pop(0)
+    if tokens:
+        last = tokens[-1]
+        if re.fullmatch(r"[a-z]+", last) and len(last) > 3 and last.endswith("s") and not last.endswith("ss"):
+            tokens[-1] = last[:-1]
+    return "".join(tokens)
 
 
 def _puzzle_ok(variant):
@@ -146,10 +164,9 @@ def validate(pack):
             err(errors, f"{tag}: 'puzzle.cozy.q' and 'puzzle.cozy.a' are required")
         else:
             a = cozy["a"]
-            # Parity with the player: its answer check normalizes BOTH sides
-            # (lowercase, strip all non-alphanumerics), so surrounding
-            # whitespace in an answer is harmless and must not error here.
-            answers.append(str(a).strip().lower())
+            # Mirror the player answer normalization so two stops cannot
+            # accept equivalent answers after punctuation/article/plural rules.
+            answers.append(_normalize_answer(a))
             if cozy.get("type") not in (None, "number", "text"):
                 err(errors, f"{tag}: puzzle type must be 'number' or 'text'")
         # Present non-cozy tiers must be well-formed (player parity): a

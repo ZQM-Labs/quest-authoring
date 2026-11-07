@@ -63,6 +63,12 @@ python validator/validate_pack.py path/to/pack.json
 
 Write your quest pack as JSON following [the spec](SPEC.md), then run the validator before publishing. **A successful Python validation means the pack passes the authoring validator; it does not guarantee that every player version accepts or correctly runs it.** Confirm compatibility by loading the exact JSON artifact in the target player build and completing the release checks below. The [Quick Start](#quick-start) shows the two local commands.
 
+## Strict JSON preflight (authoring CLI)
+
+`python validator/validate_pack.py path/to/pack.json` rejects **duplicate JSON keys even inside nested objects**, non-JSON `NaN`/`Infinity` literals, malformed UTF-8, and files larger than 4 MiB **before** applying the six-stop SPEC v1 rules. Ambiguous or unreadable input exits with status `2`, while a well-formed JSON object with schema violations exits `1`. A valid pack exits `0`. Parser errors do not repeat puzzle-answer or access-code values, and duplicate-answer diagnostics omit solution strings.
+
+This is stricter than some generic JSON decoders, including the player's ordinary `JSON.parse` handling of duplicate keys. It protects source-review consistency; **it does not change the deployed player**, prove that a pack is safe to host, or replace runtime/field acceptance tests.
+
 ## Compatibility and release contract
 
 The specification, Python validator, and player parser are separate enforcement points. A pack is not release-ready just because one of them accepts it.

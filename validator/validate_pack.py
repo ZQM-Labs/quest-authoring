@@ -20,6 +20,41 @@ import sys
 SCARE_LEVELS = ("cozy", "spooky", "afterdark", "overdrive")
 
 
+MAX_PACK_BYTES = 4 * 1024 * 1024
+
+
+def _no_duplicate_keys(pairs):
+    """Reject ambiguous nested object keys before dict materialization."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON object key")
+        result[key] = value
+    return result
+
+
+def _no_nonfinite(value):
+    """JSON.parse in the actual browser rejects NaN/Infinity tokens."""
+    raise ValueError("non-finite JSON constant is invalid")
+
+
+def load_pack(path):
+    """Bounded, strict UTF-8 JSON decoding for the authoring CLI.
+
+    This is a source-file integrity preflight, *not* a replacement for
+    validate() or the player's runtime authorization boundary.
+    """
+    with open(path, "rb") as source:
+        data = source.read(MAX_PACK_BYTES + 1)
+    if len(data) > MAX_PACK_BYTES:
+        raise ValueError("pack source exceeds 4 MiB safety limit")
+    return json.loads(
+        data.decode("utf-8"),
+        object_pairs_hook=_no_duplicate_keys,
+        parse_constant=_no_nonfinite,
+    )
+
+
 def err(errors, msg):
     errors.append(msg)
 
@@ -200,7 +235,7 @@ def validate(pack):
             err(errors, f"{tag}: 'hints' must be an array of exactly 3 strings or a per-level object")
 
     if len(set(answers)) != len(answers):
-        err(errors, f"cross-stop: puzzle.cozy.a answers must be unique (got {answers})")
+        err(errors, "cross-stop: puzzle.cozy.a answers must be unique after normalization")
     if len(set(ids)) != len(ids):
         err(errors, f"cross-stop: stop ids must be unique (got {ids})")
     return errors
@@ -211,13 +246,12 @@ def main():
         print("usage: python3 validate_pack.py <pack.json>", file=sys.stderr)
         return 2
     try:
-        with open(sys.argv[1], encoding="utf-8") as f:
-            pack = json.load(f)
+        pack = load_pack(sys.argv[1])
     except FileNotFoundError:
         print(f"file not found: {sys.argv[1]}", file=sys.stderr)
         return 2
-    except json.JSONDecodeError as e:
-        print(f"invalid JSON in {sys.argv[1]}: {e}", file=sys.stderr)
+    except (OSError, UnicodeError, ValueError, RecursionError) as e:
+        print(f"invalid pack JSON in {sys.argv[1]}: {e}", file=sys.stderr)
         return 2
     errors = validate(pack)
     warnings = _spatial_warnings(pack.get("stops", [])) if isinstance(pack, dict) and isinstance(pack.get("stops"), list) else []

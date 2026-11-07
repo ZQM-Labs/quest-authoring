@@ -4,6 +4,10 @@ The player loads a quest pack as JSON and runs it through `validatePack()`.
 **A pack that fails validation is rejected wholesale** — the player falls back
 to its built-in demo. Validate before you ship.
 
+## Source JSON integrity
+
+The authoring command-line validator first requires **unambiguous UTF-8 JSON**: duplicate object property names (including nested names and escaped equivalents), non-standard `NaN`/`Infinity` tokens and source files over 4 MiB are rejected before schema checking. This is an authoring-source preflight, not an additional runtime field in the pack or a changed entitlement rule. A syntactically valid pack still requires all six stop constraints and a check against the actual shipped browser player.
+
 ## Top level
 
 | Field | Type | Required | Meaning |
@@ -28,8 +32,7 @@ to its built-in demo. Validate before you ship.
 
 ## Cross-stop rules
 
-- All `puzzle.cozy.a` answers must be **unique** (case-insensitive),
-  or the pack is rejected.
+- All `puzzle.cozy.a` answers must be **unique under the player answer normalizer** (case, punctuation and article/plural handling), or the pack is rejected. The CLI deliberately does not print duplicate solution text.
 
 ## Dial levels (4)
 

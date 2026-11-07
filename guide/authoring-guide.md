@@ -19,8 +19,10 @@ it's the default. Then escalate:
 - **Spooky** — teens+. Riddles, light mischief, atmosphere.
   ("I have a face but cannot see…")
 - **After Dark** — adults. Wordplay, ciphers, multi-step. Harder, never meaner.
-- **Overdrive** — office/competitive. The toughest puzzles; pair with timed,
-  head-to-head play. (Format-ready now; player UI update pending — see SPEC.md.)
+- **Overdrive** — the most challenging optional puzzle variant; the Dial
+  changes story and puzzle content, **not** live multiplayer, automatic
+  team racing, or prize eligibility. Those capabilities require separate
+  implementation, safety review, and deployment evidence.
 
 If a level has no variant, the player falls back gracefully — so a Cozy-only
 pack is perfectly valid. Don't pad levels with weak puzzles; two strong levels
@@ -44,8 +46,9 @@ finish — a finished quest beats an abandoned one.
 
 ## The uniqueness rule
 
-All six `puzzle.cozy.a` answers must differ (case-insensitive) — the validator
-rejects duplicates. Plan your six answers before you write the puzzles.
+All six `puzzle.cozy.a` answers must be distinct after the player's
+normalization (case, spacing, punctuation and certain article/plural
+variants); the validator rejects normalized duplicates. Plan your six answers before you write the puzzles.
 
 ## Route craft
 

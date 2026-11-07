@@ -4,6 +4,11 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      # gitleaks-action v3 requires an organization license; v1 remains pinned
+      # until a reviewed license-free replacement or approved license exists.
+      - dependency-name: "gitleaks/gitleaks-action"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "pip"
     directory: "/"
     schedule:

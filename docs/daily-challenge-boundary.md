@@ -15,12 +15,10 @@ weaken the validator to load unrelated products.
 
 A daily mystery is a **one-question, no-location-permission** experience with
 a UTC date, a clue, three candidate answers, a single correct answer, and
-optional spoiler-free share text. The working experimental implementation is
-in ZQM-Labs/zqmlabs-site:
-https://github.com/ZQM-Labs/zqmlabs-site/tree/main/static/experiments/daily-geo-mystery
-
-This link describes the intended reviewed source path; until the site's
-prototype PR merges, use its PR source instead. The example is **not** a v1
+optional spoiler-free share text. The proposed experimental implementation is in the
+[ZQM Labs site source PR #86](https://github.com/ZQM-Labs/zqmlabs-site/pull/86).
+Use the PR as the reviewable source until it merges; do not assume the
+prototype is published or accessible from the public game directory. The example is **not** a v1
 quest pack and must not be fed to validate_pack.py or the Wisp quest-player.
 
 The experiment's 12 questions are editorial fixtures, not a production

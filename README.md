@@ -22,6 +22,10 @@ The **ZQM Labs quest-pack specification and authoring tools** define how to buil
 
 **What it contributes:** Every pack in quest-packs, and every community-submitted pack, is written against this spec and checked with this validator; quest-packs' own documentation points authors here for the generator. The player's runtime `validatePack` rules are a separate enforcement point (see the compatibility contract below), so this repo defines the format but does not by itself prove a pack will run.
 
+## Write your first six-stop quest
+
+Follow the [answer-first practical walkthrough](guide/write-your-first-quest.md) to inspect the public sample, build a six-stop JSON edition, validate it against SPEC v1, prepare appropriate QR signage and record the actual venue/player tests. The tutorial distinguishes the immediate browser **demo** from the editable sample and any separately authorized hosted event; it does not promise a one-click paid or locally bookable experience.
+
 ## Contents
 
 | Path | What it is |

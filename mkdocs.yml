@@ -1,4 +1,5 @@
 site_name: Quest Authoring
+site_url: https://quests.zqmlabs.com/
 site_description: Quest authoring patterns and specifications
 site_author: ZQM Labs
 repo_url: https://github.com/ZQM-Labs/quest-authoring
